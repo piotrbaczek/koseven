@@ -3,6 +3,12 @@
 class Kohana_Encrypt {
 
 	/**
+	 * Cipher types
+	 */
+	const TYPE_MCRYPT = 'mcrypt';
+	const TYPE_OPENSSL = 'openssl';
+	
+	/**
 	 * @var  string  default instance name
 	 */
 	public static $default = 'default';

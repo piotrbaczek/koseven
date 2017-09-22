@@ -22,6 +22,15 @@
 class Kohana_Encrypt_Engine_Openssl extends Kohana_Encrypt_Engine {
 
 	/**
+	 * AES prefix
+	 */
+	const AES = 'AES';
+	/**
+	 * WEAK encryption mode that should NEVER be used
+	 */
+	const WEAK_ECB = 'ECB';
+	
+	/**
 	 * @var int the size of the Initialization Vector (IV) in bytes
 	 */
 	protected $_iv_size;
@@ -29,7 +38,7 @@ class Kohana_Encrypt_Engine_Openssl extends Kohana_Encrypt_Engine {
 	/**
 	 * Creates a new openssl wrapper.
 	 *
-	 * @param   string  $key    encryption key
+	 * @param   string  $key_config    encryption key
 	 * @param   string  $mode   openssl mode
 	 * @param   string  $cipher openssl cipher
 	 */
@@ -44,33 +53,43 @@ class Kohana_Encrypt_Engine_Openssl extends Kohana_Encrypt_Engine {
 		parent::__construct($key_config, $mode, $cipher);
 
 		$this->_iv_size = openssl_cipher_iv_length($this->_cipher);
-
-		$length = mb_strlen($this->_key, '8bit');
-
-		// Validate configuration
-		if ($this->_cipher === 'AES-128-CBC')
-		{
-			if ($length !== 16)
-			{
-				// No valid encryption key is provided!
-				throw new Kohana_Exception('No valid encryption key is defined in the encryption configuration: length should be 16 for AES-128-CBC');
-			}
-		}
-			
-		elseif ($this->_cipher === 'AES-256-CBC')
-		{
-			if ($length !== 32)
-			{
-				// No valid encryption key is provided!
-				throw new Kohana_Exception('No valid encryption key is defined in the encryption configuration: length should be 32 for AES-256-CBC');
-			}
-		}
 		
-		else
+		if (! $this->validate_cipher_type())
 		{
 			// No valid encryption cipher is provided!
-			throw new Kohana_Exception('No valid encryption cipher is defined in the encryption configuration.');
+			throw new Kohana_Exception('No valid encryption cipher is defined in the encryption configuration. Pick one of AES-***-*** ciphers. ECB type is weak and should not be used.');
 		}
+	}
+	
+	/**
+	 * Check correct cipher validation
+	 * @return bool
+	 */
+	protected function validate_cipher_type():bool
+	{
+		$length = mb_strlen($this->_key, '8bit');
+		
+		//Require at least 16bit key
+		if ($length < 16)
+		{
+			return false;
+		}
+		
+		$type = explode('-', strtoupper($this->_cipher));
+		
+		//Do not allow ciphers other then AES
+		if($type[0] !== self::AES)
+		{
+			return false;
+		}
+		
+		//Do not allow ECB cipher mode
+		if($type[2] == self::WEAK_ECB)
+		{
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
@@ -204,17 +223,13 @@ class Kohana_Encrypt_Engine_Openssl extends Kohana_Encrypt_Engine {
 		{
 			return random_bytes($this->_iv_size);
 		}
-
-		if ((PHP_VERSION_ID >= 50307) AND (function_exists('mcrypt_create_iv')))
+		elseif(function_exists('openssl_random_pseudo_bytes'))
 		{
-			$key = mcrypt_create_iv($this->_iv_size, MCRYPT_DEV_URANDOM);
-			if (mb_strlen($key, '8bit') === $this->_iv_size)
-			{
-				return $key;
-			}
+			return openssl_random_pseudo_bytes($this->_iv_size);
 		}
-
-		throw new Kohana_Exception('Could not create initialization vector.');
+		else
+		{
+			throw new Kohana_Exception('Could not create initialization vector.');
+		}
 	}
-
 }
