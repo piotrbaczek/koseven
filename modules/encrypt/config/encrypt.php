@@ -15,12 +15,10 @@ return [
 	],
 //	'libsodium' => [
 //		'type' => Encrypt::TYPE_LIBSODIUM,
-//		'hash' => 'sha256',
 //		'key' => null
 //	],
 //	'legacy' => [
 //		'type' => Encrypt::TYPE_LEGACY,
-//		'hash' => 'sha256',
 //		'key' => NULL,
 //		'cipher' => MCRYPT_RIJNDAEL_128,
 //		'mode' => MCRYPT_MODE_CBC,
