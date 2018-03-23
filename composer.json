@@ -1,14 +1,17 @@
 {
-  "name": "koseven/koseven",
-  "description": "Koseven Framework - PHP-7 compatible replacement for Kohana",
+  "name": "piotrgolasz/skanstull",
+  "description": "CMS based on Koseven Framework",
   "license": "BSD",
   "keywords": [
-    "kohana",
-    "kohana-php7",
-    "koseven"
+    "koseven",
+    "cms",
+    "angularjs"
   ],
-  "homepage": "https://koseven.ga/",
   "authors": [
+    {
+      "name": "Piotr Gołasz",
+      "role": "developer"
+    },
     {
       "name": "Koseven Team",
       "homepage": "https://koseven.ga/",
@@ -21,21 +24,30 @@
       "role": "developer"
     }
   ],
-  "support": {
-    "forum": "https://telegram.me/koseven",
-    "issues": "https://github.com/koseven/koseven/issues"
-  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/piotrgolasz/jelly"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/piotrgolasz/tasks-migrations"
+    }
+  ],
   "require": {
-    "php": ">=7.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^6.0",
-    "phpunit/dbunit":"3.*"
-  },
-  "conflict": {
-    "kohana/core": "3.3.*"
-  },
-  "replace": {
-    "kohana/core": "3.3.*"
+    "php": ">=7.0",
+    "phpunit/phpunit": "3.7.24 - 4",
+    "phing/phing": "2.16.*",
+    "phpseclib/phpseclib": "2.0.*",
+    "tecnickcom/tcpdf": "6.2.*",
+    "hashids/hashids": "2.0.*",
+    "lcobucci/jwt": "3.2.*",
+    "tobscure/json-api": "v0.4.1",
+    "zeelot/kohana-dependencies": "0.7.x-dev",
+    "guzzlehttp/guzzle": "6.3.*",
+    "pgolasz/kohana-encrypt" : "1.0.3",
+    "vlucas/phpdotenv" : "v2.4.0",
+    "piotrgolasz/jelly" : "1.1.1",
+    "piotrgolasz/tasks-migrations" : "0.0.2"
   }
 }

@@ -3,13 +3,12 @@ RewriteEngine On
 
 ###Hides server version on Apache
 ###http://www.ducea.com/2006/06/15/apache-tips-tricks-hide-apache-software-version/
-#ServerTokens ProductOnly
-#ServerSignature Off
+ServerSignature Off
 
 ###Forces https
 <IfModule mod_rewrite.c>
-    #RewriteCond %{SERVER_PORT} !^443
-    #RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    RewriteCond %{SERVER_PORT} !^443
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
     ###Set certificate pinning
     ###https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning
@@ -20,30 +19,39 @@ RewriteEngine On
     ###Sets HSTS (Strict-Transport-Security)
     ###https://www.owasp.org/index.php/HTTP_Strict_Transport_Security
     <IfModule mod_headers.c>
-        #Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+        Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
     </IfModule>
 </IfModule>
 
 <IfModule mod_headers.c>
     ###Disable displaying webpage in Iframes -> prevents Clickjacking
     ###https://www.owasp.org/index.php/Clickjacking
-    #Header set X-Frame-Options SAMEORIGIN
+    Header set X-Frame-Options SAMEORIGIN
 
     ###Block requests with incorrect MIME-types
     ###https://www.owasp.org/index.php/OWASP_Secure_Headers_Project#X-Content-Type-Options
-    #Header set X-Content-Type-Options "nosniff"
+    Header set X-Content-Type-Options "nosniff"
 
     ###Set IE-8 XSS Filter on
     ###https://www.owasp.org/index.php/OWASP_Secure_Headers_Project#X-XSS-Protection
-    #Header set X-XSS-Protection "1; mode=block"
+    Header set X-XSS-Protection "1; mode=block"
 
     ###Disable Flash cross-domain requests
     ###https://www.owasp.org/index.php/OWASP_Secure_Headers_Project#X-Permitted-Cross-Domain-Policies
-    #Header set X-Permitted-Cross-Domain-Policies "none"
+    Header set X-Permitted-Cross-Domain-Policies "none"
+
+    ###CSP
+    Header set Content-Security-Policy: "default-src 'self' data:; style-src 'self' data: 'unsafe-inline'"
+    Header set X-Content-Security-Policy: "default-src 'self' data:; style-src 'self' data: 'unsafe-inline'"
+    Header set X-WebKit-CSP: "default-src 'self' data:; style-src 'self' data: 'unsafe-inline'"
 </IfModule>
 
 # Installation directory
 RewriteBase /
+
+#Set environment
+SetEnv KOHANA_ENV DEVELOPMENT
+#SetEnv KOHANA_ENV PRODUCTION
 
 # Protect hidden files from being viewed
 <Files .*>
@@ -51,10 +59,17 @@ RewriteBase /
 	Deny From All
 </Files>
 
-# Allow any files or directories that exist to be displayed directly
+#BACKEND
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{HTTP_HOST} (www\.)?backend\.*
+RewriteRule .* backend.php [PT,QSA,L]
+
+#API
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{HTTP_HOST} (www\.)?api\.*
+RewriteRule .* api.php [PT,QSA,L]
+
+#FRONTEND
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# Rewrite all other URLs to index.php/URL
-# godaddy hack no input file specified
 RewriteRule .* index.php [PT,QSA,L]

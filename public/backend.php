@@ -6,7 +6,7 @@
  *
  * @link http://kohanaframework.org/guide/about.install#application
  */
-$application = 'application/frontend';
+$application = 'application/backend';
 
 /**
  * The directory in which your modules are located.
