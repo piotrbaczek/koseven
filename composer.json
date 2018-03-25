@@ -32,6 +32,10 @@
     {
       "type": "vcs",
       "url": "https://github.com/piotrgolasz/tasks-migrations"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/piotrgolasz/jelly-auth-argon2i"
     }
   ],
   "require": {
@@ -48,6 +52,7 @@
     "pgolasz/kohana-encrypt" : "1.0.3",
     "vlucas/phpdotenv" : "v2.4.0",
     "piotrgolasz/jelly" : "1.1.1",
-    "piotrgolasz/tasks-migrations" : "0.0.2"
+    "piotrgolasz/tasks-migrations" : "0.0.2",
+    "piotrgolasz/jelly-auth-argon2i":"0.0.1"
   }
 }

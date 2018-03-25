@@ -128,13 +128,14 @@ Kohana::$config->attach(new Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules([
+    'skanstull' => MODPATH . 'skanstull',
     'auth' => MODPATH . 'auth',       // Basic authentication
+    'cache' => MODPATH . 'cache',      // Caching with multiple backends
     'di' => DOCROOT . DIRECTORY_SEPARATOR . 'vendor/zeelot/kohana-dependencies',
     'database' => MODPATH . 'database',   // Database access
     'encrypt' => DOCROOT . DIRECTORY_SEPARATOR . 'vendor/pgolasz/kohana-encrypt',
     'jelly' => DOCROOT . DIRECTORY_SEPARATOR . 'vendor/piotrgolasz/jelly',
-    //'jelly-auth-argon' => MODPATH . 'jelly-auth-argon',
-    'skanstull' => MODPATH . 'skanstull',
+    'jelly-auth-argon2i' => DOCROOT . DIRECTORY_SEPARATOR . 'vendor/piotrgolasz/jelly-auth-argon2i',
     // 'encrypt'    => MODPATH.'encrypt',    // Encryption supprt
     // 'auth'       => MODPATH.'auth',       // Basic authentication
     // 'cache'      => MODPATH.'cache',      // Caching with multiple backends
@@ -191,7 +192,8 @@ Route::set('resource', '<directory>/<model>/<id>', [
     'action' => 'index',
     'model' => 'default'
 ])
-    ->filter(function (Route $route, array $params, Request $request) {
+    ->filter(function (Route $route, array $params, Request $request)
+    {
         switch ($request->method())
         {
             case Request::POST:

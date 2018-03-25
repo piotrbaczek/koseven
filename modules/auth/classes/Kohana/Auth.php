@@ -48,7 +48,6 @@ abstract class Kohana_Auth {
 	 * Loads Session and configuration options.
 	 *
 	 * @param   array  $config  Config Options
-	 * @return  void
 	 */
 	public function __construct($config = [])
 	{
