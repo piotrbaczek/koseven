@@ -13,7 +13,10 @@
  */
 class Model_User extends Model_Auth_User
 {
-
+    /**
+     * @inheritdoc
+     * @param Jelly_Meta $meta
+     */
     public static function initialize(Jelly_Meta $meta)
     {
         // Fields defined by the model
@@ -53,10 +56,53 @@ class Model_User extends Model_Auth_User
                     'hash'
                 ]
             ]),
-            'password_history' => Jelly::field('json', [
-                'label' => 'password_history',
-                'default' => '[]',
-                'private' => TRUE
+            'firstname' => Jelly::field('string', [
+                'label' => 'firstname',
+                'rules' => [
+                    ['max_length', [':value', 50]]
+                ]
+            ]),
+            'lastname' => Jelly::field('string', [
+                'label' => 'lastname',
+                'rules' => [
+                    ['max_length', [':value', 50]]
+                ]
+            ]),
+            'address' => Jelly::field('string', [
+                'label' => 'address',
+                'rules' => [
+                    ['max_length', [':value', 50]]
+                ]
+            ]),
+            'home' => Jelly::field('string', [
+                'label' => 'home',
+                'rules' => [
+                    ['max_length', [':value', 5]]
+                ]
+            ]),
+            'flat' => Jelly::field('string', [
+                'label' => 'flat',
+                'rules' => [
+                    ['max_length', [':value', 5]]
+                ]
+            ]),
+            'city' => Jelly::field('string', [
+                'label' => 'city',
+                'rules' => [
+                    ['max_length', [':value', 50]]
+                ]
+            ]),
+            'postcode' => Jelly::field('string', [
+                'label' => 'postcode',
+                'rules' => [
+                    ['max_length', [':value', 10]]
+                ]
+            ]),
+            'phone' => Jelly::field('string', [
+                'label' => 'phone',
+                'rules' => [
+                    ['max_length', [':value', 15]]
+                ]
             ]),
             'logins' => Jelly::field('integer', [
                 'default' => 0,
@@ -64,14 +110,23 @@ class Model_User extends Model_Auth_User
                 'empty_value' => 0,
             ]),
             'last_login' => Jelly::field('timestamp'),
-            // Relationships to other models
-            'user_tokens' => Jelly::field('hasmany', [
-                'foreign' => 'user_token',
-                'private' => TRUE,
+            'created_at' => Jelly::field('timestamp'),
+            'updated_at' => Jelly::field('timestamp'),
+            'password_expired' => Jelly::field('timestamp'),
+            'password_history' => Jelly::field('json', [
+                'label' => 'password_history',
+                'default' => '[]',
+                'private' => TRUE
             ]),
+            'is_deleted' => Jelly::field('boolean'),
+            // Relationships to other models
             'country' => Jelly::field('belongsto', [
                 'allow_null' => TRUE,
                 'default' => NULL
+            ]),
+            'user_tokens' => Jelly::field('hasmany', [
+                'foreign' => 'user_token',
+                'private' => TRUE,
             ]),
             'roles' => Jelly::field('manytomany'),
         ]);
