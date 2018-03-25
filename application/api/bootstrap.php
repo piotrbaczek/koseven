@@ -111,6 +111,7 @@ Kohana::init(array(
     'base_url' => null,
     'caching' => Kohana::$environment == Kohana::PRODUCTION,
     'errors' => Kohana::$environment == Kohana::DEVELOPMENT,
+    'index_file' => FALSE,
     'profile' => Kohana::$environment == Kohana::DEVELOPMENT,
 ));
 
@@ -189,7 +190,69 @@ Route::set('resource', '<directory>/<model>/<id>', [
 ])->defaults([
     'directory' => 'v1',
     'controller' => 'default',
-    'action' => 'index',
+    'action' => 'get',
+    'model' => 'default'
+])
+    ->filter(function (Route $route, array $params, Request $request)
+    {
+        switch ($request->method())
+        {
+            case Request::POST:
+                $params['action'] = 'post';
+                break;
+            case Request::PATCH:
+                $params['action'] = 'patch';
+                break;
+            case Request::DELETE:
+                $params['action'] = 'delete';
+                break;
+            default :
+                $params['action'] = 'get';
+                break;
+        }
+        return $params;
+    });
+
+Route::set('collection', '<directory>/<model>', [
+    'directory' => '(v1|v2|v3|v4|v5)',
+    'controller' => '[a-z_]+',
+    'model' => '[a-z_]+',
+    'action' => '[a-z]+',
+])->defaults([
+    'directory' => 'v1',
+    'controller' => 'default',
+    'action' => 'get',
+    'model' => 'default'
+])
+    ->filter(function (Route $route, array $params, Request $request)
+    {
+        switch ($request->method())
+        {
+            case Request::POST:
+                $params['action'] = 'post';
+                break;
+            case Request::PATCH:
+                $params['action'] = 'patch';
+                break;
+            case Request::DELETE:
+                $params['action'] = 'delete';
+                break;
+            default :
+                $params['action'] = 'get';
+                break;
+        }
+        return $params;
+    });
+
+Route::set('action', '<directory>/<model>', [
+    'directory' => '(v1|v2|v3|v4|v5)',
+    'controller' => '[a-z_]+',
+    'model' => '[a-z_]+',
+    'action' => '[a-z]+',
+])->defaults([
+    'directory' => 'v1',
+    'controller' => 'default',
+    'action' => 'get',
     'model' => 'default'
 ])
     ->filter(function (Route $route, array $params, Request $request)

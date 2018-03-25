@@ -6,7 +6,7 @@
  * Time: 16:20
  */
 
-class Controller_Core extends Controller
+abstract class Controller_Core extends Controller
 {
     use Traits_Injectdi;
     /**
