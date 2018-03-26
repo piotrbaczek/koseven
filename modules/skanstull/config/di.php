@@ -7,9 +7,26 @@
  */
 
 return [
+    '_apiDocument' => [
+        '_settings' => [
+            'class' => '\Tobscure\JsonApi\Document',
+            'methods' => [
+                [
+                    'setJsonapi', [
+                    ['version' => '1.0']
+                ]
+                ],
+            ],
+        ]
+    ],
+    '_apiValidator' => [
+        '_settings' => [
+            'class' => 'Api_Validator'
+        ]
+    ],
     '_hashid' => [
         '_settings' => [
-            'class' => '\Hashids\Hashids',
+            'class' => 'Hashids',
             'arguments' => [
                 getenv('HASHID_SALT'),
                 11

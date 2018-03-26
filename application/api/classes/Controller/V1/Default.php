@@ -21,51 +21,69 @@ use Tobscure\JsonApi\Exception\Handler\FallbackExceptionHandler;
 /**
  * Class Controller_V1_Default
  * @property Dependency_Container $di
+ * @property \Tobscure\JsonApi\Parameters $_parameters
+ * @property Document $apiDocument
+ * @property Hashids $hashids
+ * @property Api_Validator $apiValidator
  */
 class Controller_V1_Default extends Controller_Api_Resource implements Interfaces_Restapi
 {
+    protected $hashids;
+    protected $apiDocument;
+    protected $apiValidator;
+
+    public function before()
+    {
+        $this->hashids = $this->di->get('_hashid');
+        $this->apiDocument = $this->di->get('_apiDocument');
+        $this->apiValidator = $this->di->get('_apiValidator');
+        parent::before();
+    }
+
     /**
      * API GET
      * @return mixed
      */
     public function action_get()
     {
-        $id = $this->di->get('_hashid')->decode($this->request->param('id'))[0];
-        if ($id)
+        try
         {
-            try
+            $id = $this->hashids->decodeOne($this->request->param('id'), FALSE);
+            if ($id)
             {
-                $model = Jelly::query($this->request->param('model'), $id)->select();
+                $this->apiValidator::modelExists($this->request->param('model'));
+                $model = Jelly::query($this->request->param('model'), $id)
+                    ->active()
+                    ->select();
                 if ($model->loaded())
                 {
                     $resource = new Resource($model, $this->di->get('_modelSerializer'));
                     $resource->fields($this->_parameters->getFields());
                     $resource->with($this->_parameters->getInclude($model->getRelationships()));
-                    $document = new Document($resource);
-                    $document->addMeta('jsonapi', ['version' => '1.0']);
-                    $this->_output($document->toArray());
+                    $this->apiDocument->setData($resource);
+                    $this->_output($this->apiDocument->toArray());
                 }
                 else
                 {
                     $this->_output([], 404);
                 }
-            } catch (Exception $ex)
-            {
-                $errors = new ErrorHandler();
-
-                $errors->registerHandler(new InvalidParameterExceptionHandler);
-                $errors->registerHandler(new FallbackExceptionHandler(Kohana::$environment === Kohana::DEVELOPMENT));
-
-                $response = $errors->handle($ex);
-
-                $document = new Document();
-                $document->setErrors($response->getErrors());
-                $this->_output($document->toArray(), $response->getStatus());
             }
-        }
-        else
+            else
+            {
+                $this->_output([], 404);
+            }
+        } catch (Exception $ex)
         {
-            $this->_output([], 404);
+            $errors = new ErrorHandler();
+
+            $errors->registerHandler(new InvalidParameterExceptionHandler);
+            $errors->registerHandler(new Api_Exception_Handler_Http);
+            $errors->registerHandler(new FallbackExceptionHandler(Kohana::$environment === Kohana::DEVELOPMENT));
+
+            $response = $errors->handle($ex);
+
+            $this->apiDocument->setErrors($response->getErrors());
+            $this->_output($this->apiDocument->toArray(), $response->getStatus());
         }
     }
 

@@ -118,7 +118,9 @@ class Model_User extends Model_Auth_User
                 'default' => '[]',
                 'private' => TRUE
             ]),
-            'is_deleted' => Jelly::field('boolean'),
+            'is_deleted' => Jelly::field('boolean', [
+                'private' => TRUE
+            ]),
             // Relationships to other models
             'country' => Jelly::field('belongsto', [
                 'allow_null' => TRUE,
