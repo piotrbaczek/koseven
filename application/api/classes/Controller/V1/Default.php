@@ -15,13 +15,14 @@
 use Tobscure\JsonApi\Resource;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\ErrorHandler;
+use Tobscure\JsonApi\Parameters;
 use Tobscure\JsonApi\Exception\Handler\InvalidParameterExceptionHandler;
 use Tobscure\JsonApi\Exception\Handler\FallbackExceptionHandler;
 
 /**
  * Class Controller_V1_Default
  * @property Dependency_Container $di
- * @property \Tobscure\JsonApi\Parameters $_parameters
+ * @property Parameters $_parameters
  * @property Document $apiDocument
  * @property Hashids $hashids
  * @property Api_Validator $apiValidator
@@ -48,10 +49,10 @@ class Controller_V1_Default extends Controller_Api_Resource implements Interface
     {
         try
         {
+            $this->apiValidator::modelExists($this->request->param('model'));
             $id = $this->hashids->decodeOne($this->request->param('id'), FALSE);
             if ($id)
             {
-                $this->apiValidator::modelExists($this->request->param('model'));
                 $model = Jelly::query($this->request->param('model'), $id)
                     ->active()
                     ->select();

@@ -8,7 +8,7 @@
 class Jelly_Builder extends Jelly_Core_Builder
 {
     /**
-     * Checks if model is internally NOT DELETED
+     * Checks if model is INTERNALLY NOT DELETED
      * @return $this
      * @throws Kohana_Exception
      */

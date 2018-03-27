@@ -26,11 +26,18 @@ class ModelSerializer implements SerializerInterface
      */
     protected $hashids;
 
+    /**
+     * ModelSerializer constructor.
+     * @param \Hashids\Hashids $hashids
+     */
     public function __construct(\Hashids\Hashids $hashids)
     {
         $this->hashids = $hashids;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getAttributes($model, array $fields = NULL): array
     {
         foreach ($model->meta()->fields() as $field)
@@ -52,11 +59,17 @@ class ModelSerializer implements SerializerInterface
         return $fields;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getId($model): string
     {
         return $this->hashids->encode($model->id);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getLinks($model): array
     {
         return [
@@ -68,12 +81,18 @@ class ModelSerializer implements SerializerInterface
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getMeta($model): array
     {
         return [];
     }
 
-    public function getRelationship($model, $name)
+    /**
+     * @inheritdoc
+     */
+    public function getRelationship($model, $name): Relationship
     {
         $relation = $model->{$name};
         $relationship = new Relationship();
@@ -89,6 +108,9 @@ class ModelSerializer implements SerializerInterface
         return $relationship;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getType($model): string
     {
         return $model->meta()->model();
