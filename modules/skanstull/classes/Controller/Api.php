@@ -7,6 +7,7 @@
  * Time: 14:15
  */
 
+use Tobscure\JsonApi\ErrorHandler;
 use Tobscure\JsonApi\Parameters;
 
 /**
@@ -93,76 +94,63 @@ abstract class Controller_Api extends Controller_Core
 
     protected function initParams()
     {
-        switch ($this->request->method())
+        try
         {
-            case Request::POST:
-            case Request::PATCH:
-            case Request::DELETE:
-                throw new Kohana_Exception('Sprawdzić działąnie na vnd/api+json');
-//                if (isset($_SERVER['CONTENT_TYPE']) && false !== strpos($_SERVER['CONTENT_TYPE'], 'application/json'))
-//                {
-//                    $parsed_body = json_decode($this->request->body(), true);
-//                }
-//                else
-//                {
-//                    parse_str($this->request->body(), $parsed_body);
-//                }
-//                $this->_params = array_merge((array)$parsed_body, (array)$this->request->post());
-            // No break because all methods should support query parameters by default.
-            case Request::GET:
-                $this->_parameters = new Parameters($this->request->query());
-                break;
-            default:
-                break;
-        }
-    }
+            switch ($this->request->method())
+            {
+                case Request::POST:
+                case Request::PATCH:
+                case Request::DELETE:
+                    if (isset($_SERVER['CONTENT_TYPE']) && false !== strpos($_SERVER['CONTENT_TYPE'], self::CONTENT_TYPE))
+                    {
+                        $parsed_body = json_decode($this->request->body(), true);
+                    }
+                    else
+                    {
+                        throw new HTTP_Exception_415("Unsupported media type.");
+                    }
+                    $this->_parameters = new Parameters(array_merge((array)$parsed_body, (array)$this->request->post()));
+                    break;
+                case Request::GET:
+                    $this->_parameters = new Parameters($this->request->query());
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception $ex)
+        {
+            $errors = new ErrorHandler();
 
-    protected function _exceptionError(\Throwable $exception): void
-    {
-        $message = $exception->getMessage();
-        $code = $exception->getCode();
-        // Fetch field from HTTP Exceptions.
-        $field = method_exists($exception, 'getField') ? $exception->getField() : null;
-        // Support fallback on default HTTP error messages.
-        if (!$message && isset(Response::$messages[$code]))
-        {
-            $message = Response::$messages[$code];
+            $errors->registerHandler(new Api_Exception_Handler_Http);
+
+            $response = $errors->handle($ex);
+
+            $this->_output($this->di->get('_apiDocument')->setErrors($response->getErrors())->toArray(), $response->getStatus());
         }
-        $output = array(
-            'code' => $code,
-            'error' => $message,
-        );
-        if ($field)
-        {
-            $output['field'] = $field;
-        }
-        $this->_output($output, $code);
-        $this->request->action('error');
     }
 
     protected function _output(array $data = [], int $code = 200): void
     {
-        // Handle an empty and valid response.
-        if (empty($data) && 200 == $code)
-        {
-            $data = [
-                'code' => 404,
-                'error' => 'No records found',
-            ];
-            $code = 404;
-        }
-
         $this->response
             ->headers('content-type', self::CONTENT_TYPE)
             ->status($code)
             ->body(json_encode($data));
     }
 
-    /**
-     * See comment in _error().
-     */
     public function action_error()
     {
+        try
+        {
+            throw new HTTP_Exception_405(self::$messages[405]);
+        } catch (Exception $ex)
+        {
+            $errors = new ErrorHandler();
 
+            $errors->registerHandler(new Api_Exception_Handler_Http);
+
+            $response = $errors->handle($ex);
+
+            $this->_output($this->di->get('_apiDocument')->setErrors($response->getErrors())->toArray(), $response->getStatus());
+        }
     }
 }

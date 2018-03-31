@@ -183,15 +183,12 @@ Cookie::$secure = isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] == 'on' ? TRUE 
  */
 Route::set('resource', '<directory>/<model>/<id>', [
     'directory' => '(v1|v2|v3|v4|v5)',
-    'controller' => '[a-z_]+',
     'model' => '[a-z_]+',
     'action' => '[a-z]+',
     'id' => '[0-9A-Za-z]+',
 ])->defaults([
     'directory' => 'v1',
-    'controller' => 'default',
-    'action' => 'get',
-    'model' => 'default'
+    'controller' => 'default'
 ])
     ->filter(function (Route $route, array $params, Request $request)
     {
@@ -206,74 +203,77 @@ Route::set('resource', '<directory>/<model>/<id>', [
             case Request::DELETE:
                 $params['action'] = 'delete';
                 break;
-            default :
+            case Request::GET:
                 $params['action'] = 'get';
+                break;
+            default:
+                $params['action'] = 'error';
                 break;
         }
         return $params;
     });
 
-Route::set('collection', '<directory>/<model>', [
-    'directory' => '(v1|v2|v3|v4|v5)',
-    'controller' => '[a-z_]+',
-    'model' => '[a-z_]+',
-    'action' => '[a-z]+',
-])->defaults([
-    'directory' => 'v1',
-    'controller' => 'default',
-    'action' => 'get',
-    'model' => 'default'
-])
-    ->filter(function (Route $route, array $params, Request $request)
-    {
-        switch ($request->method())
-        {
-            case Request::POST:
-                $params['action'] = 'post';
-                break;
-            case Request::PATCH:
-                $params['action'] = 'patch';
-                break;
-            case Request::DELETE:
-                $params['action'] = 'delete';
-                break;
-            default :
-                $params['action'] = 'get';
-                break;
-        }
-        return $params;
-    });
-
-Route::set('action', '<directory>/<model>', [
-    'directory' => '(v1|v2|v3|v4|v5)',
-    'controller' => '[a-z_]+',
-    'model' => '[a-z_]+',
-    'action' => '[a-z]+',
-])->defaults([
-    'directory' => 'v1',
-    'controller' => 'default',
-    'action' => 'get',
-    'model' => 'default'
-])
-    ->filter(function (Route $route, array $params, Request $request)
-    {
-        switch ($request->method())
-        {
-            case Request::POST:
-                $params['action'] = 'post';
-                break;
-            case Request::PATCH:
-                $params['action'] = 'patch';
-                break;
-            case Request::DELETE:
-                $params['action'] = 'delete';
-                break;
-            default :
-                $params['action'] = 'get';
-                break;
-        }
-        return $params;
-    });
+//Route::set('collection', '<directory>/<model>', [
+//    'directory' => '(v1|v2|v3|v4|v5)',
+//    'controller' => '[a-z_]+',
+//    'model' => '[a-z_]+',
+//    'action' => '[a-z]+',
+//])->defaults([
+//    'directory' => 'v1',
+//    'controller' => 'default',
+//    'action' => 'get',
+//    'model' => 'default'
+//])
+//    ->filter(function (Route $route, array $params, Request $request)
+//    {
+//        switch ($request->method())
+//        {
+//            case Request::POST:
+//                $params['action'] = 'post';
+//                break;
+//            case Request::PATCH:
+//                $params['action'] = 'patch';
+//                break;
+//            case Request::DELETE:
+//                $params['action'] = 'delete';
+//                break;
+//            default :
+//                $params['action'] = 'get';
+//                break;
+//        }
+//        return $params;
+//    });
+//
+//Route::set('action', '<directory>/<model>', [
+//    'directory' => '(v1|v2|v3|v4|v5)',
+//    'controller' => '[a-z_]+',
+//    'model' => '[a-z_]+',
+//    'action' => '[a-z]+',
+//])->defaults([
+//    'directory' => 'v1',
+//    'controller' => 'default',
+//    'action' => 'get',
+//    'model' => 'default'
+//])
+//    ->filter(function (Route $route, array $params, Request $request)
+//    {
+//        switch ($request->method())
+//        {
+//            case Request::POST:
+//                $params['action'] = 'post';
+//                break;
+//            case Request::PATCH:
+//                $params['action'] = 'patch';
+//                break;
+//            case Request::DELETE:
+//                $params['action'] = 'delete';
+//                break;
+//            default :
+//                $params['action'] = 'get';
+//                break;
+//        }
+//        return $params;
+//    });
 
 
 Route::set('default', '(<controller>(/<action>(/<id>)))')
