@@ -3,17 +3,17 @@
 // -- Environment setup --------------------------------------------------------
 
 // Load the core Kohana class
-require SYSPATH . 'classes/Kohana/Core' . EXT;
+require SYSPATH.'classes/Kohana/Core'.EXT;
 
-if (is_file(APPPATH . 'classes/Kohana' . EXT))
+if (is_file(APPPATH.'classes/Kohana'.EXT))
 {
-    // Application extends the core
-    require APPPATH . 'classes/Kohana' . EXT;
+	// Application extends the core
+	require APPPATH.'classes/Kohana'.EXT;
 }
 else
 {
-    // Load empty core extension
-    require SYSPATH . 'classes/Kohana' . EXT;
+	// Load empty core extension
+	require SYSPATH.'classes/Kohana'.EXT;
 }
 
 /**
@@ -38,7 +38,7 @@ setlocale(LC_ALL, 'en_US.utf-8');
  * @link http://kohanaframework.org/guide/using.autoloading
  * @link http://www.php.net/manual/function.spl-autoload-register
  */
-spl_autoload_register(array('Kohana', 'auto_load'));
+spl_autoload_register(['Kohana', 'auto_load']);
 
 /**
  * Optionally, you can enable a compatibility auto-loader for use with
@@ -59,7 +59,10 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
 /**
  * Enable composer autoload libraries
  */
-require DOCROOT . '/vendor/autoload.php';
+if (is_file(DOCROOT.'/vendor/autoload.php'))
+{
+	require DOCROOT.'/vendor/autoload.php';
+}
 
 /**
  * Set the mb_substitute_character to "none"
@@ -107,10 +110,9 @@ if (isset($_SERVER['KOHANA_ENV']))
  * - boolean  caching     enable or disable internal caching                 FALSE
  * - boolean  expose      set the X-Powered-By header                        FALSE
  */
-Kohana::init(array(
-    'base_url' => null,
-));
-
+Kohana::init([
+    'base_url'   => null,
+]);
 /**
  * Attach the file write to logging. Multiple writers are supported.
  */
@@ -124,7 +126,7 @@ Kohana::$config->attach(new Config_File);
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
-Kohana::modules(array(
+Kohana::modules([
     // 'encrypt'    => MODPATH.'encrypt',    // Encryption supprt
     // 'auth'       => MODPATH.'auth',       // Basic authentication
     // 'cache'      => MODPATH.'cache',      // Caching with multiple backends
@@ -136,7 +138,7 @@ Kohana::modules(array(
     // 'pagination' => MODPATH.'pagination', // Pagination
     // 'unittest'   => MODPATH.'unittest',   // Unit testing
     // 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-));
+]);
 
 /**
  * Cookie Salt
@@ -165,7 +167,7 @@ Kohana::modules(array(
  * defaults for the URI.
  */
 Route::set('default', '(<controller>(/<action>(/<id>)))')
-    ->defaults(array(
-        'controller' => 'welcome',
-        'action' => 'index',
-    ));
+	->defaults([
+		'controller' => 'welcome',
+		'action'     => 'index',
+	]);

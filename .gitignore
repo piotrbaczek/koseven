@@ -12,3 +12,6 @@ application/logs/*
 
 # Composer
 /vendor/
+
+# Coverage reports
+/build/logs/
