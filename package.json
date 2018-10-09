@@ -1,0 +1,23 @@
+{
+  "name": "angularjs-sample-app",
+  "version": "0.0.1",
+  "repository": "https://github.com/piotrgolasz/angularjs-sample-app",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@angular/core": "6.1.9",
+    "@angular/router": "6.1.9",
+    "@angular/http": "6.1.9",
+    "@angular/material": "6.4.7",
+    "@angular/cdk": "6.4.7",
+    "@angular/animations": "6.1.9",
+    "@angular/platform-browser": "6.1.9",
+    "@angular/common": "6.1.9",
+    "rxjs": "6.3.3",
+    "zone.js": "0.8.26",
+    "ajv": "6.5.4",
+    "@symfony/webpack-encore": "0.20.1"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.20.1"
+  }
+}

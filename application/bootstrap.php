@@ -3,17 +3,14 @@
 // -- Environment setup --------------------------------------------------------
 
 // Load the core Kohana class
-require SYSPATH.'classes/Kohana/Core'.EXT;
+require SYSPATH . 'classes/Kohana/Core' . EXT;
 
-if (is_file(APPPATH.'classes/Kohana'.EXT))
-{
-	// Application extends the core
-	require APPPATH.'classes/Kohana'.EXT;
-}
-else
-{
-	// Load empty core extension
-	require SYSPATH.'classes/Kohana'.EXT;
+if (is_file(APPPATH . 'classes/Kohana' . EXT)) {
+    // Application extends the core
+    require APPPATH . 'classes/Kohana' . EXT;
+} else {
+    // Load empty core extension
+    require SYSPATH . 'classes/Kohana' . EXT;
 }
 
 /**
@@ -59,9 +56,8 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
 /**
  * Enable composer autoload libraries
  */
-if (is_file(DOCROOT.'/vendor/autoload.php'))
-{
-	require DOCROOT.'/vendor/autoload.php';
+if (is_file(DOCROOT . '/vendor/autoload.php')) {
+    require DOCROOT . '/vendor/autoload.php';
 }
 
 /**
@@ -78,10 +74,9 @@ mb_substitute_character('none');
  */
 I18n::lang('en-us');
 
-if (isset($_SERVER['SERVER_PROTOCOL']))
-{
-	// Replace the default protocol.
-	HTTP::$protocol = $_SERVER['SERVER_PROTOCOL'];
+if (isset($_SERVER['SERVER_PROTOCOL'])) {
+    // Replace the default protocol.
+    HTTP::$protocol = $_SERVER['SERVER_PROTOCOL'];
 }
 
 /**
@@ -90,9 +85,8 @@ if (isset($_SERVER['SERVER_PROTOCOL']))
  * Note: If you supply an invalid environment name, a PHP warning will be thrown
  * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
  */
-if (isset($_SERVER['KOHANA_ENV']))
-{
-	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['KOHANA_ENV']));
+if (isset($_SERVER['KOHANA_ENV'])) {
+    Kohana::$environment = constant('Kohana::' . strtoupper($_SERVER['KOHANA_ENV']));
 }
 
 /**
@@ -111,13 +105,14 @@ if (isset($_SERVER['KOHANA_ENV']))
  * - boolean  expose      set the X-Powered-By header                        FALSE
  */
 Kohana::init([
-	'base_url'   => '/',
+    'base_url'   => '/',
+    'index_file' => false,
 ]);
 
 /**
  * Attach the file write to logging. Multiple writers are supported.
  */
-Kohana::$log->attach(new Log_File(APPPATH.'logs'));
+Kohana::$log->attach(new Log_File(APPPATH . 'logs'));
 
 /**
  * Attach a file reader to config. Multiple readers are supported.
@@ -128,18 +123,18 @@ Kohana::$config->attach(new Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules([
-	// 'encrypt'    => MODPATH.'encrypt',    // Encryption supprt
-	// 'auth'       => MODPATH.'auth',       // Basic authentication
-	// 'cache'      => MODPATH.'cache',      // Caching with multiple backends
-	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
-	// 'database'   => MODPATH.'database',   // Database access
-	// 'image'      => MODPATH.'image',      // Image manipulation
-	// 'minion'     => MODPATH.'minion',     // CLI Tasks
-	// 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
-	// 'pagination' => MODPATH.'pagination', // Pagination
-	// 'unittest'   => MODPATH.'unittest',   // Unit testing
-	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-	]);
+    'encrypt'    => MODPATH . 'encrypt',    // Encryption supprt
+    'auth'       => MODPATH . 'auth',       // Basic authentication
+    // 'cache'      => MODPATH.'cache',      // Caching with multiple backends
+    // 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
+    'database'   => MODPATH . 'database',   // Database access
+    // 'image'      => MODPATH.'image',      // Image manipulation
+    'minion'     => MODPATH . 'minion',     // CLI Tasks
+    // 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
+    'pagination' => MODPATH . 'pagination', // Pagination
+    // 'unittest'   => MODPATH.'unittest',   // Unit testing
+    // 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
+]);
 
 /**
  * Cookie Salt
@@ -148,7 +143,7 @@ Kohana::modules([
  * If you have not defined a cookie salt in your Cookie class then
  * uncomment the line below and define a preferrably long salt.
  */
-// Cookie::$salt = NULL;
+Cookie::$salt = ',<gAJzL`tynm@M}*f9qVM2{W@z2<3\'PC';
 /**
  * Cookie HttpOnly directive
  * If set to true, disallows cookies to be accessed from JavaScript
@@ -168,7 +163,7 @@ Kohana::modules([
  * defaults for the URI.
  */
 Route::set('default', '(<controller>(/<action>(/<id>)))')
-	->defaults([
-		'controller' => 'welcome',
-		'action'     => 'index',
-	]);
+    ->defaults([
+        'controller' => 'welcome',
+        'action'     => 'index',
+    ]);

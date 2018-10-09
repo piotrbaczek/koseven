@@ -13,5 +13,8 @@ application/logs/*
 /vendor/
 composer.lock
 
+#npm
+/node_modules/
+
 # Coverage reports
 /build/logs/
