@@ -13,8 +13,7 @@ class Controller_Welcome extends Controller_Template
      */
     public function action_index()
     {
-        $asdf = 'Hello world!';
-        $this->template->bind('asdf', $asdf);
+
     }
 
 } // End Welcome

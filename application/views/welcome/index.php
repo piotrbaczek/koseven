@@ -1,1 +1,1 @@
-<?=$asdf?>
+<app-root></app-root>
