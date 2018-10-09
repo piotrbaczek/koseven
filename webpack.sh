@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 cd ./js
-npx webpack --watch --progress
+npx ng build --watch --progress
