@@ -14,7 +14,11 @@ Encore
   .enableSourceMaps(!Encore.isProduction())
   //.enableSassLoader()
   //.enableVersioning() // hashed filenames (e.g. main.abc123.js)
-  .setOutputPath('../public/build/')
-  .setPublicPath('/build/');
+  .setOutputPath('../public/build/js')
+  .setPublicPath('/js');
 
 module.exports = Encore.getWebpackConfig();
+
+/*
+
+*/
