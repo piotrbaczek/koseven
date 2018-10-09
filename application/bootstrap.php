@@ -107,6 +107,9 @@ if (isset($_SERVER['KOHANA_ENV'])) {
 Kohana::init([
     'base_url'   => '/',
     'index_file' => false,
+    'expose'     => true,
+    'errors'     => Kohana::$environment == Kohana::DEVELOPMENT,
+    'profile'    => Kohana::$environment == Kohana::DEVELOPMENT,
 ]);
 
 /**

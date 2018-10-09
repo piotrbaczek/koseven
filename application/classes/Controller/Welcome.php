@@ -1,10 +1,20 @@
 <?php
 
-class Controller_Welcome extends Controller {
+/**
+ * Class Controller_Welcome
+ */
+class Controller_Welcome extends Controller_Template
+{
+    /** @var string $template */
+    public $template = 'welcome/index';
 
-	public function action_index()
-	{
-		$this->response->body('hello, world!');
-	}
+    /**
+     * Index action
+     */
+    public function action_index()
+    {
+        $asdf = 'Hello world!';
+        $this->template->bind('asdf', $asdf);
+    }
 
 } // End Welcome
