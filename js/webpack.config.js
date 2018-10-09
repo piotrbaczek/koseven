@@ -12,7 +12,7 @@ Encore
 
   // enable features!
   .enableSourceMaps(!Encore.isProduction())
-  .enableSassLoader()
+  //.enableSassLoader()
   //.enableVersioning() // hashed filenames (e.g. main.abc123.js)
   .setOutputPath('../public/build/')
   .setPublicPath('/build/');
