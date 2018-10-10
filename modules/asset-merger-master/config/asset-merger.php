@@ -4,8 +4,8 @@ return [
     'merge'           => [Kohana::PRODUCTION, Kohana::STAGING],
     'folder'          => 'build',
     'load_paths'      => [
-        Assets::JAVASCRIPT => DOCROOT . 'public' . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR,
-        Assets::STYLESHEET => DOCROOT . 'css' . DIRECTORY_SEPARATOR,
+        Assets::JAVASCRIPT => DOCROOT . 'public' . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR,
+        Assets::STYLESHEET => DOCROOT . 'public' . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR,
     ],
     'integrity_check' => false,
     'show_paths'      => false,

@@ -18,6 +18,10 @@ abstract class Controller_Core_Template extends Controller_Template
         $this->template->bind('assets',$this->assets);
 
         $this->assets = Assets::factory('app')
-            ->js('app.js');
+            ->js('main.js')
+            ->js('polyfills.js')
+            ->js('runtime.js')
+            ->js('styles.js')
+            ->js('vendor.js');
     }
 }
