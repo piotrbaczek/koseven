@@ -59,7 +59,7 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
 /**
  * Enable composer autoload libraries
  */
-if (is_file(DOCROOT.'/vendor/autoload.php'))
+if (file_exists(DOCROOT.'/vendor/autoload.php'))
 {
 	require DOCROOT.'/vendor/autoload.php';
 }
@@ -111,7 +111,7 @@ if (isset($_SERVER['KOHANA_ENV']))
  * - boolean  expose      set the X-Powered-By header                        FALSE
  */
 Kohana::init([
-	'base_url'   => '/',
+	'base_url' => '/',
 ]);
 
 /**
@@ -139,7 +139,7 @@ Kohana::modules([
 	// 'pagination' => MODPATH.'pagination', // Pagination
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-	]);
+]);
 
 /**
  * Cookie Salt
@@ -167,8 +167,7 @@ Kohana::modules([
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
-Route::set('default', '(<controller>(/<action>(/<id>)))')
-	->defaults([
+Route::set('default', '(<controller>(/<action>(/<id>)))')->defaults([
 		'controller' => 'welcome',
 		'action'     => 'index',
 	]);
